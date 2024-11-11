@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceProvider", "InvoiceProvider\InvoiceProvider.csproj", "{7F9DCE45-F358-4399-9C66-707AD19D94EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceProvider", "InvoiceProvider\InvoiceProvider.csproj", "{7F9DCE45-F358-4399-9C66-707AD19D94EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceManagementLibrary", "InvoiceManagementLibrary\InvoiceManagementLibrary.csproj", "{8A2C0790-98FB-45D5-83B3-35501272B5D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7F9DCE45-F358-4399-9C66-707AD19D94EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F9DCE45-F358-4399-9C66-707AD19D94EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F9DCE45-F358-4399-9C66-707AD19D94EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2C0790-98FB-45D5-83B3-35501272B5D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2C0790-98FB-45D5-83B3-35501272B5D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2C0790-98FB-45D5-83B3-35501272B5D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2C0790-98FB-45D5-83B3-35501272B5D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
