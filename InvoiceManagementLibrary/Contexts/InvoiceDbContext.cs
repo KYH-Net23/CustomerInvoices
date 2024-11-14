@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace InvoiceManagementLibrary.Contexts
 {
-    public class InvoiceDbContext : DbContext 
+    public class InvoiceDbContext : DbContext  
     {
      protected InvoiceDbContext()
         {

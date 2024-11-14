@@ -1,4 +1,5 @@
 ﻿using InvoiceManagementLibrary.Entities;
+using InvoiceManagementLibrary.Factories;
 using InvoiceManagementLibrary.Repositories;
 
 
@@ -47,5 +48,66 @@ namespace InvoiceManagementLibrary.Services
                 return null;
             }
         }
+
+
+        public async Task<string> CreateInvoiceAsync(InvoiceEntity model)
+        {
+            if (model.Amount <= 0)
+            {
+                throw new ArgumentException("Beloppet måste vara större än noll.");
+            }
+
+            if (model.DueDate < model.Date)
+            {
+                throw new ArgumentException("Förfallodatum måste vara senare än fakturadatum.");
+            }
+
+            model.Status = "Unpaid";  
+ 
+            string result = await _invoiceRepository.AddAsync(model);
+            return result;
+        }
+
+        public async Task<InvoiceEntity?> UpdateInvoiceAsync(int invoiceId, InvoiceEntity updatedModel)
+        {
+            try
+            {
+                var updatedInvoice = await _invoiceRepository.UpdateInvoiceAsync(invoiceId, updatedModel);
+                if (updatedInvoice == null) 
+                {
+                    Console.WriteLine($"Invoice with ID {invoiceId} not found.");
+                    return null;
+                }
+                return updatedInvoice;
+            }
+
+            catch (Exception ex) 
+            {
+                Console.WriteLine($"An error occurred while updating invoice with ID {invoiceId}: {ex.Message}");
+                throw;
+            }
+        }
+
+
+        public async Task<InvoiceEntity?> DeleteInvoiceAsync(int invoiceId)
+        {
+            try
+            {
+                var deletedInvoice = await _invoiceRepository.DeleteInvoiceAsync(invoiceId);
+                if (deletedInvoice == null)
+                {
+                    Console.WriteLine($"Invoice with ID {invoiceId} not found.");
+                    return null;
+                }
+                return deletedInvoice;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while updating invoice with ID {invoiceId}: {ex.Message}");
+                throw;
+            }
+        }
+
     }
 }

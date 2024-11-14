@@ -1,6 +1,26 @@
-@InvoiceProvider_HostAddress = http://localhost:5160
+@InvoiceProvider_HostAddress = http://localhost:5160/swagger
 
-GET {{InvoiceProvider_HostAddress}}/weatherforecast/
+### 
+POST {{InvoiceProvider_HostAddress}}/api/createinvoice
+Content-Type: application/json
 Accept: application/json
 
+
+
 ###
+GET {{InvoiceProvider_HostAddress}}/api/getoneinvoice/{invoiceId}
+Accept: application/json
+
+### 
+GET {{InvoiceProvider_HostAddress}}/api/getallinvoices
+Accept: application/json
+
+### 
+DELETE {{InvoiceProvider_HostAddress}}/api/deleteinvoice/{invoiceId}
+Accept: application/json
+
+### 
+PUT {{InvoiceProvider_HostAddress}}/api/updateinvoice/{invoiceId}
+Content-Type: application/json
+Accept: application/json
+
