@@ -1,4 +1,6 @@
 ﻿using InvoiceManagementLibrary.Entities;
+using InvoiceManagementLibrary.Factories;
+using InvoiceManagementLibrary.Models;
 using InvoiceManagementLibrary.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +20,12 @@ namespace InvoiceProvider.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateInvoiceAsync([FromBody] InvoiceEntity model)
+        public async Task<IActionResult> CreateInvoiceAsync([FromBody] InvoiceModel model)
         {
             try
-            {
-                var result = await _invoiceService.CreateInvoiceAsync(model);
+            {   
+                var entity = InvoiceFactory.CreateInvoiceEntity(model);
+                var result = await _invoiceService.CreateInvoiceAsync(entity);
                 return Ok(result);
             }
             catch (ArgumentException ex)

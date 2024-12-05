@@ -1,4 +1,5 @@
 ﻿using InvoiceManagementLibrary.Entities;
+using InvoiceManagementLibrary.Models;
 using InvoiceManagementLibrary.ViewModels;
 
 namespace InvoiceManagementLibrary.Factories;
@@ -16,4 +17,19 @@ public static class InvoiceFactory
             Status = invoice.Status
         };
     }
+
+    public static InvoiceEntity CreateInvoiceEntity(InvoiceModel invoice)
+    {
+        return new InvoiceEntity
+        {
+            OrderId = invoice.OrderId,
+            CustomerId = invoice.CustomerId,
+            DueDate = invoice.DueDate,
+            PaidDate = invoice.PaidDate,
+            Amount = invoice.Amount,
+            Status = invoice.Status
+        };
+    }
+
+   
 }

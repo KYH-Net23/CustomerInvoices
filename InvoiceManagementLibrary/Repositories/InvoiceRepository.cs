@@ -1,106 +1,61 @@
-﻿using InvoiceManagementLibrary.Entities;
+﻿using InvoiceManagementLibrary.Contexts;
+using InvoiceManagementLibrary.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceManagementLibrary.Repositories
 {
     public class InvoiceRepository : IInvoiceRepository
     {
-        private readonly List<InvoiceEntity> _mockInvoices = new List<InvoiceEntity>
+        private readonly InvoiceDbContext _context;
+
+        public InvoiceRepository(InvoiceDbContext context)
         {
-            new InvoiceEntity { InvoiceId = 1, CustomerId = 1234, OrderId = 1234, Amount = 100, Status = "Paid" },
-            new InvoiceEntity { InvoiceId = 2, CustomerId = 12345, OrderId = 12345, Amount = 200, Status = "Pending" }
-        };
+            _context = context;
+        }
 
         public async Task<List<InvoiceEntity>> GetAllInvoicesAsync()
         {
-            try
-            {
-                return await Task.FromResult(_mockInvoices);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ett fel uppstod vid hämtning av alla fakturor: {ex.Message}");
-                throw;
-            }
+            return await _context.Invoices.ToListAsync();
         }
 
         public async Task<InvoiceEntity?> GetInvoiceByIdAsync(int invoiceId)
         {
-            try
-            {
-                var invoice = _mockInvoices.FirstOrDefault(i => i.InvoiceId == invoiceId);
-                return await Task.FromResult(invoice);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ett fel uppstod vid hämtning av faktura med ID {invoiceId}: {ex.Message}");
-                throw;
-            }
+            return await _context.Invoices.FindAsync(invoiceId);
         }
 
         public async Task<string> AddAsync(InvoiceEntity model)
         {
-            try
-            {
-                model.InvoiceId = _mockInvoices.Max(i => i.InvoiceId) + 1; 
-                _mockInvoices.Add(model);
-                return await Task.FromResult("Invoice successfully added.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ett fel uppstod vid tillägg av faktura: {ex.Message}");
-                throw;
-            }
+            await _context.Invoices.AddAsync(model);
+            return "Invoice successfully added.";
         }
 
         public async Task<InvoiceEntity?> UpdateInvoiceAsync(int invoiceId, InvoiceEntity updatedModel)
         {
-            try
-            {
-                var invoice =  _mockInvoices.FirstOrDefault(i =>i.InvoiceId == invoiceId);
-                if (invoice == null) 
-                {
-                    return await Task.FromResult<InvoiceEntity?>(null); 
-                }
+            var existingInvoice = await _context.Invoices.FindAsync(invoiceId);
+            if (existingInvoice == null) return null;
 
-                invoice.CustomerId = updatedModel.CustomerId;
-                invoice.OrderId = updatedModel.OrderId;
-                invoice.Amount = updatedModel.Amount;
-                invoice.Status = updatedModel.Status;
-                invoice.DueDate = updatedModel.DueDate;
-                invoice.Date = updatedModel.Date;
+            existingInvoice.CustomerId = updatedModel.CustomerId;
+            existingInvoice.OrderId = updatedModel.OrderId;
+            existingInvoice.Amount = updatedModel.Amount;
+            existingInvoice.Status = updatedModel.Status;
+            existingInvoice.DueDate = updatedModel.DueDate;
+            existingInvoice.Date = updatedModel.Date;
 
-                return await Task.FromResult(invoice);
-            }
-
-            catch (Exception ex) 
-            {
-                Console.WriteLine($"Ett fel uppstod vid uppdatering av faktura med ID {invoiceId}: {ex.Message}");
-                throw;
-            }
+            return existingInvoice;
         }
-
 
         public async Task<InvoiceEntity?> DeleteInvoiceAsync(int invoiceId)
-            {
-                try 
-            { 
-                var invoice = _mockInvoices.FirstOrDefault(i =>i.InvoiceId == invoiceId);
-                if (invoice == null)
-                {
-                    return  await Task.FromResult<InvoiceEntity?>(null);
-                }
+        {
+            var invoice = await _context.Invoices.FindAsync(invoiceId);
+            if (invoice == null) return null;
 
-                _mockInvoices.Remove(invoice);
-                return await Task.FromResult(invoice);
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ett fel uppstod vid borttagning av faktura med ID {invoiceId}: {ex.Message}");
-                throw;
-            }
+            _context.Invoices.Remove(invoice);
+            return invoice;
         }
 
-
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

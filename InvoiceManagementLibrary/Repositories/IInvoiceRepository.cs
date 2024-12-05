@@ -9,6 +9,7 @@ namespace InvoiceManagementLibrary.Repositories
         Task<string> AddAsync(InvoiceEntity model);
         Task<InvoiceEntity?> UpdateInvoiceAsync(int invoiceId, InvoiceEntity updatedModel);
         Task<InvoiceEntity?> DeleteInvoiceAsync(int invoiceId);
+        Task SaveChangesAsync();
 
 
     }

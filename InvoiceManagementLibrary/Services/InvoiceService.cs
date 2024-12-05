@@ -2,7 +2,6 @@
 using InvoiceManagementLibrary.Factories;
 using InvoiceManagementLibrary.Repositories;
 
-
 namespace InvoiceManagementLibrary.Services
 {
     public class InvoiceService : IInvoiceService
@@ -19,11 +18,10 @@ namespace InvoiceManagementLibrary.Services
             try
             {
                 var invoices = await _invoiceRepository.GetAllInvoicesAsync();
-                return invoices ?? new List<InvoiceEntity>(); 
+                return invoices ?? new List<InvoiceEntity>();
             }
             catch (Exception ex)
             {
-                
                 Console.WriteLine($"An error occurred while fetching all invoices: {ex.Message}");
                 return new List<InvoiceEntity>();
             }
@@ -37,18 +35,16 @@ namespace InvoiceManagementLibrary.Services
                 if (invoice == null)
                 {
                     Console.WriteLine($"Invoice with ID {invoiceId} not found.");
-                    return null; 
+                    return null;
                 }
                 return invoice;
             }
             catch (Exception ex)
             {
-                
                 Console.WriteLine($"An error occurred while fetching invoice with ID {invoiceId}: {ex.Message}");
                 return null;
             }
         }
-
 
         public async Task<string> CreateInvoiceAsync(InvoiceEntity model)
         {
@@ -62,32 +58,32 @@ namespace InvoiceManagementLibrary.Services
                 throw new ArgumentException("Förfallodatum måste vara senare än fakturadatum.");
             }
 
-            model.Status = "Unpaid";  
- 
+            model.Status = "Unpaid";
             string result = await _invoiceRepository.AddAsync(model);
+            await _invoiceRepository.SaveChangesAsync(); // Bekräfta ändringar
             return result;
         }
+
 
         public async Task<InvoiceEntity?> UpdateInvoiceAsync(int invoiceId, InvoiceEntity updatedModel)
         {
             try
             {
                 var updatedInvoice = await _invoiceRepository.UpdateInvoiceAsync(invoiceId, updatedModel);
-                if (updatedInvoice == null) 
+                if (updatedInvoice == null)
                 {
                     Console.WriteLine($"Invoice with ID {invoiceId} not found.");
                     return null;
                 }
+                await _invoiceRepository.SaveChangesAsync(); // Bekräfta ändringarna i databasen
                 return updatedInvoice;
             }
-
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while updating invoice with ID {invoiceId}: {ex.Message}");
                 throw;
             }
         }
-
 
         public async Task<InvoiceEntity?> DeleteInvoiceAsync(int invoiceId)
         {
@@ -99,15 +95,14 @@ namespace InvoiceManagementLibrary.Services
                     Console.WriteLine($"Invoice with ID {invoiceId} not found.");
                     return null;
                 }
+                await _invoiceRepository.SaveChangesAsync(); // Bekräfta borttagning i databasen
                 return deletedInvoice;
             }
-
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while updating invoice with ID {invoiceId}: {ex.Message}");
+                Console.WriteLine($"An error occurred while deleting invoice with ID {invoiceId}: {ex.Message}");
                 throw;
             }
         }
-
     }
 }
